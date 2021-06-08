@@ -11,40 +11,70 @@
     <form action="tea.php" method="POST">
         <input type="text" id="message" name="message">
     </form>
-    <input type="submit" value="Send">
+    <button id = "btn" type="button" onclick="ajaxPOST()">Send</button>
+
 </div>
 </div>
 <script>
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('GET', 'http://localhost/tea.php', true);
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4) {
-            if (xmlhttp.status == 200) {
-                var messages = JSON.parse(xmlhttp.responseText);
-                console.log(messages);
-                var cnt = 0;
-                for (const msg of messages) {
+    var lastMsgId = 0;
+    var cnt = 0;
+    
+    var db_url = 'http://localhost/tea/tea.php';
 
-                    var div = document.createElement("div");
-                    div.className = cnt++ % 2 == 0 ? "container" : "container darker";
-                    var para = document.createElement("p");
-                    var node = document.createTextNode(msg["text"]);
-                    para.appendChild(node);
-                    div.appendChild(para);
+    ajaxGET(db_url, showMessages);
 
-                    var span = document.createElement("span");
-                    span.className = "time-left";
-                    var time = document.createTextNode(msg["date"]);
-                    span.appendChild(time);
+    var intervalId = window.setInterval(function () {
+        ajaxGET(db_url + "/lastMsg?id=" + lastMsgId, showMessages);
+    }, 5000);
 
-                    div.appendChild(span);
-                    var element = document.getElementById("out");
-                    element.appendChild(div);
-                }
+    function ajaxGET(url, callback) {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open('GET', url, true);
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                callback(xmlhttp.responseText);
             }
+        };
+        xmlhttp.send();
+    }
+
+    function ajaxPOST() {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open('POST', db_url, true);
+        var message = document.getElementById("message").value;
+        var msg = JSON.stringify(message);
+        xmlhttp.send(msg);
+    }
+
+    function showMessages(response) {
+        if (!response) {
+            return;
         }
-    };
-    xmlhttp.send();
+        var messages = JSON.parse(response);
+        console.log(messages);
+
+        for (const msg of messages) {
+            if (lastMsgId < msg["id"]) {
+                lastMsgId = msg["id"];
+            }
+            var div = document.createElement("div");
+            div.className = cnt++ % 2 == 0 ? "container" : "container darker";
+            var para = document.createElement("p");
+            var node = document.createTextNode(msg["text"]);
+            para.appendChild(node);
+            div.appendChild(para);
+
+            var span = document.createElement("span");
+            span.className = "time-left";
+            var time = document.createTextNode(msg["date"]);
+            span.appendChild(time);
+
+            div.appendChild(span);
+            var element = document.getElementById("out");
+            element.appendChild(div);
+            console.log(lastMsgId);
+        }
+    }
 </script>
 
 </html>
