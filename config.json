@@ -1,0 +1,4 @@
+{
+    "db_url": "http://localhost/tea/tea.php"
+}
+var data = '{"name" : "Ashwin", "age" : "20"}';

@@ -1,16 +1,21 @@
 /* Chat containers */
+html{
+  word-wrap: break-word;
+}
+
 .container {
     border: 2px solid #dedede;
     background-color: #f1f1f1;
     border-radius: 5px;
     padding: 10px;
-    max-width: 200px;
+    max-width: 500px;
     margin: 10px 0;
   }
   
   #out{
-      max-width: 300;
+      max-width: 500;
   }
+
   /* Darker chat container */
   .darker {
     border-color: #ccc;
@@ -25,16 +30,16 @@
   }
   
   /* Style images */
-  .container img {
+  .author {
     float: left;
-    max-width: 60px;
+    max-width: 200px;
     width: 100%;
+    font-weight: bold;
     margin-right: 20px;
-    border-radius: 50%;
   }
   
   /* Style the right image */
-  .container img.right {
+  .author-right {
     float: right;
     margin-left: 20px;
     margin-right:0;

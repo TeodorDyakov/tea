@@ -8,24 +8,24 @@
 </div>
 
 <div>
-    <form action="tea.php" method="POST">
-        <input type="text" id="message" name="message">
-    </form>
-    <button id = "btn" type="button" onclick="ajaxPOST()">Send</button>
-
+    <input type="text" id="message" name="message">
+    <button id="btn" type="button" onclick="ajaxPOST()">Send</button>
 </div>
 </div>
 <script>
     var lastMsgId = 0;
     var cnt = 0;
-    
+
     var db_url = 'http://localhost/tea/tea.php';
+    // db_url = "http://95.87.217.207:82/tea/tea.php"
 
     ajaxGET(db_url, showMessages);
 
     var intervalId = window.setInterval(function () {
-        ajaxGET(db_url + "/lastMsg?id=" + lastMsgId, showMessages);
-    }, 5000);
+        if (!document.hidden) {
+            ajaxGET(db_url + "/lastMsg?id=" + lastMsgId, showMessages);
+        }
+    }, 1000);
 
     function ajaxGET(url, callback) {
         var xmlhttp = new XMLHttpRequest();
@@ -46,6 +46,18 @@
         xmlhttp.send(msg);
     }
 
+    var input = document.getElementById("message");
+    // Execute a function when the user releases a key on the keyboard
+    input.addEventListener("keyup", function (event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            document.getElementById("btn").click();
+        }
+    });
+
     function showMessages(response) {
         if (!response) {
             return;
@@ -54,7 +66,8 @@
         console.log(messages);
 
         for (const msg of messages) {
-            if (lastMsgId < msg["id"]) {
+            console.log("AAAA" + parseInt(lastMsgId))
+            if (parseInt(lastMsgId) < parseInt(msg["id"])) {
                 lastMsgId = msg["id"];
             }
             var div = document.createElement("div");
@@ -64,15 +77,21 @@
             para.appendChild(node);
             div.appendChild(para);
 
+            var authorSpan = document.createElement("span");
+            authorSpan.className = "author";
+            var author = document.createTextNode(msg["author"]);
+            authorSpan.appendChild(author);
+            div.appendChild(authorSpan);
+
             var span = document.createElement("span");
-            span.className = "time-left";
+            span.className = "time-right";
             var time = document.createTextNode(msg["date"]);
             span.appendChild(time);
 
             div.appendChild(span);
             var element = document.getElementById("out");
             element.appendChild(div);
-            console.log(lastMsgId);
+            window.scrollTo(0, document.body.scrollHeight);
         }
     }
 </script>
