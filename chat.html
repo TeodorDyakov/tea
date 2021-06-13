@@ -2,42 +2,14 @@
 
 <head>
     <link rel="stylesheet" href="style.css">
-    <li class="list-item"><a href="file.html"></a></li>
 </head>
 
 <div id="out">
 </div>
 
 <div>
-
-<input type="text" id="message" name="message">
-<button id="btn" type="button" onclick="ajaxPOST()">Send</button>
-
-    <div class="emoji-list">
-
-      <div class="emoji-row">
-        <p id="em">&#128540</p>
-        <p id="em">&#128512</p>
-        <p id="em">&#128513</p>
-        <p id="em">&#128514</p>
-
-    </div>
-
-    <div class="emoji-row">
-        <p id="em">&#128515</p>
-        <p id="em">&#128516</p>
-        <p id="em">&#128517</p>
-        <p id="em">&#128518</p>
-    </div>
-
-    <div class="emoji-row">
-
-        <p id="em">&#128519</p>
-        <p id="em">&#128520</p>
-        <p id="em">&#128521</p>
-        <p id="em">&#128522</p>
-
-    </div>
+    <input type="text" id="message" name="message">
+    <button id="btn" type="button" onclick="ajaxPOST()">Send</button>
 </div>
 </div>
 <script>
@@ -91,10 +63,8 @@
             return;
         }
         var messages = JSON.parse(response);
-        console.log(messages);
 
         for (const msg of messages) {
-            console.log("AAAA" + parseInt(lastMsgId))
             if (parseInt(lastMsgId) < parseInt(msg["id"])) {
                 lastMsgId = msg["id"];
             }

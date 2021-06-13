@@ -5,4 +5,4 @@ CREATE TABLE `chat`.`messages`
  `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
-  CREATE TABLE `chat`.`last_active` ( `user_id` CHAR(20) NOT NULL , `last_active` DATETIME NOT NULL ) ENGINE = InnoDB;
+  CREATE TABLE `chat`.`last_active` ( `id_of_user` CHAR(20) NOT NULL , `last_active` DATETIME NOT NULL ) ENGINE = InnoDB;
